@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from Practicas.Utils import LinealInterpolation, SES
+import os
 
 
 if __name__ == '__main__':
@@ -12,9 +13,21 @@ if __name__ == '__main__':
     pd.set_option('display.width', 1000)
     pd.set_option('display.colheader_justify', 'center')
 
-    readingNumber = '2'
+    readingNumber = '3'
+
+    # Obtiene el directorio del script TratarDatos.py
+    currentPath = os.path.dirname(os.path.abspath(__file__))
+
+    # Sube un nivel (a Unidad2)
+    practicasPath = os.path.dirname(currentPath)
+
+    # Construye la ruta a Archivo.csv
+    filePath = os.path.join(practicasPath, 'Practica2', 'Python', f'sensor_readings{readingNumber}.csv')
+    print(filePath)
+
+
     plotCheck = 1
-    dataset = pd.read_csv(f'../Practica2/sensor_readings{readingNumber}.csv')
+    dataset = pd.read_csv(filePath)
 
     # Check each line for any missing value
     missingValues = dataset.isnull().any(axis=1)

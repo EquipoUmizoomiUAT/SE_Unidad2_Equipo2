@@ -48,8 +48,7 @@ if __name__ == "__main__":
                 if day < 8:
                     if time == 0:
                         print(f'Predijiendo valores para el dia {days[day]}')
-                        #serie = SES.calc_suavizado_exponencial(serie, 0.5)
-                        serie = ARIMA.calculateARIMA(serie)
+                        serie = SES.calc_suavizado_exponencial(serie, 0.5)
                     if time < 23:
                         WriteArduino(serie[time])
                         time += 1

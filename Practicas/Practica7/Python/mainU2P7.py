@@ -1,25 +1,23 @@
 from serial.serialutil import SerialException
-from Practicas.Utils import PromedioPonderado as PP, ARIMA
-from Practicas.Utils import SES
+from Practicas.Utils import SES, ARIMA
 import serial
 import time as t
-# inter pol y ouliers
+
 
 def WriteArduino(value):
-    if value < 256:
+    if value < 50:
         arduino.write('0'.encode('utf-8'))
         return
-    if value < 512:
+    if value < 100:
         arduino.write('1'.encode('utf-8'))
         return
-    if value < 768:
+    if value < 150:
         arduino.write('2'.encode('utf-8'))
         return
     arduino.write('3'.encode('utf-8'))
 
 
 if __name__ == "__main__":
-    w = 0.8
     day = 1
     days = {
         1: 'Lunes',
@@ -35,10 +33,11 @@ if __name__ == "__main__":
     arduino = serial.Serial(port='com3', baudrate=9600, timeout=10)
     while True:
         try:
-            value = int(arduino.readline().decode('utf-8').strip())
+            value = arduino.readline()
             if day == 1:
-                if time < 24:
+                if time < 23:
                     print('Se leyo valor de arduino')
+                    value = int(value.decode('utf-8').strip())
                     serie.append(value)
                     WriteArduino(value)
                     time += 1
@@ -49,10 +48,9 @@ if __name__ == "__main__":
                 if day < 8:
                     if time == 0:
                         print(f'Predijiendo valores para el dia {days[day]}')
-                        serie = SES.calc_suavizado_exponencial(serie, 0.5)
-                    if time < 24:
-                        value = PP.PromedioPonderado(value, serie[time], w)
-                        WriteArduino(value)
+                        serie = ARIMA.calculateARIMA(serie)
+                    if time < 23:
+                        WriteArduino(serie[time])
                         time += 1
                     else:
                         time = 0
@@ -61,7 +59,7 @@ if __name__ == "__main__":
                     day = 1
                     time = 0
                     serie = []
-            print(f'Es {days[day]} a las {time - 1}:00 horas, la luz es de {value if day == 1 else serie[time]}')
+            print(f'Es {days[day]} a las {time}:00 horas, la luz es de {value if day == 1 else serie[time]}')
             t.sleep(3)
         except SerialException:
             print("Something went berry wrong with Arduino")

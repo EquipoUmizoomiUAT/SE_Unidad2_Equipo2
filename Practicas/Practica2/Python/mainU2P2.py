@@ -10,7 +10,7 @@ print('Aridono connecto')
 # Telegram bot details
 bot_token = '8048512753:AAFUfd_3KzdTBJ1z9UMgNSheaK6OOqdVsUY'
 chat_id = '7579784242'
-readingnumber = 4
+readingnumber = 6
 
 
 def send_telegram_message(message):

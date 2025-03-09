@@ -27,4 +27,4 @@ def graphValuesTime(csv_file):
 
 
 if __name__ == '__main__':
-    graphValuesTime('sensor_readings.csv')
+    graphValuesTime('sensor_readings6.csv')
